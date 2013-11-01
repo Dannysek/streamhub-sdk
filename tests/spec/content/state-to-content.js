@@ -6,7 +6,7 @@ define([
 function (jasmine, StateToContent, Transform, LivefyreInstagramContent) {
     'use strict';
 
-    describe('streamhub-sdk/streams/transforms/state-to-content', function () {
+    describe('State-to-content', function () {
         it('is a Transform', function () {
             expect(StateToContent).toEqual(jasmine.any(Function));
             expect(StateToContent.prototype).toEqual(jasmine.any(Object));

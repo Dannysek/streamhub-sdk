@@ -109,9 +109,9 @@ function (jasmine, jasminejquery, $, ListView, Content, ContentView) {
                 });
             });
             it(".add still always adds ContentViews", function () {
-                var content1 = new Content('1'),
-                    content2 = new Content('2'),
-                    content3 = new Content('3');
+                var content1 = new Content('1', '111111'),
+                    content2 = new Content('2', '222222'),
+                    content3 = new Content('3', '333333');
                 listView.add(content1);
                 listView.add(content2);
                 listView.add(content3);
@@ -120,9 +120,9 @@ function (jasmine, jasminejquery, $, ListView, Content, ContentView) {
             it(".writing one more than initial results in only initial contentViews", function () {
                 var origInitial = initial;
                 while (--initial) {
-                    listView.write(new Content(initial.toString()));
+                    listView.write(new Content(initial.toString(), initial.toString()));
                 }
-                listView.write(new Content(initial.toString()));
+                listView.write(new Content(initial.toString(), initial.toString()));
                 expect(listView.views.length).toBe(origInitial);
             });
             it(".showMore() can be called, and sets .more's goal", function () {
@@ -138,7 +138,7 @@ function (jasmine, jasminejquery, $, ListView, Content, ContentView) {
                     remaining = toAdd;
                     spyOn(listView, '_write').andCallThrough();
                     while (remaining--) {
-                        listView.more.write(new Content(remaining.toString()));
+                        listView.more.write(new Content(remaining.toString(), remaining.toString()));
                     }
                 });
                 it("only results in initial # of contentViews", function () {

@@ -10,7 +10,7 @@ define(['streamhub-sdk/content', 'inherits'], function(Content, inherits) {
      * @constructor
      */
     var TwitterContent = function (json) {
-        Content.call(this);
+        Content.call(this, this);
         json = json || {};
         this.tweetId = json.tweetId;
     };

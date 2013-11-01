@@ -17,27 +17,57 @@ function ($, jasmine, jasmineJquery, util, Content, LivefyreContent, ContentView
             it('has a .createdAt Date', function () {
                 expect(contentView.createdAt instanceof Date).toBe(true);
             });
-            
-            it('listens to its content for emissions', function () {
-                throw 'TODO (joao)'
-            });
         });
         
         describe('.remove', function () {
+            var content,
+                contentView,
+                countListeners = function ($el) {
+                    var obj = $._data($el, 'events');
+                    return obj ? Object.getOwnPropertyNames(obj).length : 0;
+                };
             beforeEach(function () {
-                
+                content = new Content('Body Text', 'id');
+                contentView = new ContentView({'content': content});
+                contentView.render();
             });
             
             it('can remove its elements from the dom', function () {
-                throw 'TODO (joao)'
+                var $obj = contentView.$el,
+                    elem = $obj[0],
+                    doc = document.documentElement;
+                $obj.prependTo(doc);
+                expect($.contains(doc, elem)).toBe(true);
+                
+                contentView.remove();
+                
+                expect($.contains(doc, elem)).toBe(false);
             });
             
             it('can remove its listeners', function () {
-                throw 'TODO (joao)'
+                expect(countListeners(contentView.$el[0])).toBeGreaterThan(0);
+                
+                contentView.remove();
+                
+                expect(countListeners(contentView.$el[0])).toBe(0);
             });
             
-            it('emits \'removed\'', function () {
-                throw 'TODO (joao)'
+            it('is called when its content is \'removed\'', function () {
+                spyOn(contentView, 'remove').andCallThrough();
+                
+                content.emit('removed');
+                
+                expect(contentView.remove).toHaveBeenCalled();
+            });
+            
+            it('emits \'removeContentView.hub\'', function () {
+                var spy = jasmine.createSpy('removed handler');
+                
+                contentView.$el.on('removeContentView.hub', spy);
+                
+                contentView.remove();
+                
+                expect(spy).toHaveBeenCalled();
             });
         });
 

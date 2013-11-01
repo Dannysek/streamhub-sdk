@@ -48,8 +48,8 @@ debug, Writable, ContentView, More, ShowMoreButton, ContentListViewTemplate) {
         var self = this;
         ListView.prototype.setElement.apply(this, arguments);
 
-        this.$el.on('removeContentView.hub', function(e, content) {
-            self.remove(content);
+        this.$el.on('removeContentView.hub', function(e, contentView) {
+            self.remove(contentView.content);
         });
         this.$el.on('focusContent.hub', function(e, context) {
             var contentView = self.getContentView(context.content);

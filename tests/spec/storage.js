@@ -9,29 +9,32 @@ function ($, jasmine, Storage, Content) {
 
     describe('Storage', function () {
         var contentA,
-            contentB;
+            contentB,
+            onSpy;
         beforeEach(function () {
             Storage.cache = {};
             contentA = new Content("Body A");
             contentB = new Content("Body B");
+            onSpy = jasmine.createSpy('event handler');
         });
         
         describe(".set", function () {
+            
             beforeEach(function () {
                 
             });
             
-            it("adds new contents and emits 'add'", function () {
-                spyOn(Storage, "emit");
+            it("adds new contents and emits 'storage.add'", function () {
+                Storage.on('storage.add', onSpy);
                 
                 Storage.set(contentA.id, contentA);
                 
                 expect(Storage.cache[contentA.id]).toEqual(contentA);
-                expect(Storage.emit).toHaveBeenCalledWith('add');
+                expect(onSpy).toHaveBeenCalledWith(contentA);
             });
 
-            it("updates existing contents and emits 'change'", function () {
-                spyOn(Storage, "emit");
+            it("updates existing contents and emits 'storage.change'", function () {
+                Storage.on('storage.change', onSpy);
                 
                 Storage.set(contentA.id, contentA);
                 Storage.set(contentA.id, contentB);
@@ -41,7 +44,7 @@ function ($, jasmine, Storage, Content) {
                 //with the new Content; it's supposed to set the properties
                 //of the new Content on the old Content object.
                 expect(Storage.cache[contentA.id].body).toEqual(contentB.body);
-                expect(Storage.emit).toHaveBeenCalledWith('change');
+                expect(onSpy).toHaveBeenCalledWith(contentA, contentB);
             });
             
             it("returns content", function () {
@@ -63,7 +66,7 @@ function ($, jasmine, Storage, Content) {
             var key;
             beforeEach(function () {
                 key = contentA.id;
-                Storage.cache = {key: contentA};
+                Storage.cache[key] = contentA;
             });
             
             it("returns content", function () {
@@ -80,7 +83,7 @@ function ($, jasmine, Storage, Content) {
             
             it("executes callback when provided", function () {
                 var spy = jasmine.createSpy('callback');
-                Storage.get('key', spy);
+                Storage.get(key, spy);
                 
                 expect(spy).toHaveBeenCalledWith(contentA);
             });

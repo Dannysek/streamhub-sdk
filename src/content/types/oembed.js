@@ -12,7 +12,7 @@ function($, Content, inherits) {
      * @constructor
      */
     var Oembed = function(json) {
-        Content.call(this);
+        Content.call(this, this);
         // @todo set a .body property that can be used to embed standard HTML easily
 
         if (json && Oembed.types.indexOf(json.type) === -1) {

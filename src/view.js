@@ -66,11 +66,9 @@ define([
     };
 
     /**
-     * Add a piece of Content to the View. Subclasses should implement this
-     * @param content {Content} A Content instance to render in the View
-     * @returns {ContentView} By convention, .add should return any new ContentView created to render the content
+     * TODO (joao)
      */
-    View.prototype.add = function(content) { return null; };
+    View.prototype.remove = function(content) { return null; };
 
     return View;
 });

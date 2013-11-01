@@ -9,12 +9,13 @@ define([
      * A piece of Web Content
      * @param body {String|Object} A string of HTML, the Content body.
      *     If an object, it should have a .body property
+     * @param [opt_id] {string} An id for this content. Preferably unique.
      * @fires Content#attachment
      * @fires Content#removeAttachment
      * @exports streamhub-sdk/content
      * @constructor
      */
-    var Content = function(bodyOrObj) {
+    var Content = function(bodyOrObj, opt_id) {
         var body = bodyOrObj;
         var obj = {};
         EventEmitter.call(this);
@@ -22,7 +23,9 @@ define([
             body = body.body;
             obj = bodyOrObj;
         }
-        this.body = this.body || body;
+        this.body = body;
+        this.id = obj.id || opt_id || '0';//TODO (joao) Maybe Math.floor(Math.random() * 10000000);
+        this.visibility = obj.visibility || obj.vis || 1;
         this.attachments = obj.attachments || [];
         this.replies = obj.replies || [];
     };
@@ -67,15 +70,23 @@ define([
     Content.prototype.set = function (newProperties) {
         newProperties = newProperties || {};
         var oldProperties = {};
-        var oldVal, newVal;
+        var oldVal, newVal, changed;
         for (var key in newProperties) {
             if (newProperties.hasOwnProperty(key)) {
                 oldVal = oldProperties[key] = this[key];
                 newVal = this[key] = newProperties[key];
-                this.emit('change:'+key, newVal, oldVal);
+                if (newVal !== oldVal) {
+                    this.emit('change:'+key, newVal, oldVal);//Will emit 'change:visibility'
+                    changed = true;
+                }
             }
         }
-        this.emit('change', newProperties, oldProperties);
+        if (changed) {
+            this.emit('change', newProperties, oldProperties);
+            if (this.visibility === 0) {
+                this.emit('removed');
+            }
+        }
     };
 
     return Content;

@@ -26,11 +26,13 @@ define([
         this.attachmentsView = opts.attachmentsView;
         this.setElement(opts.el || document.createElement(this.elTag));
 
-        var self = this;
         if (this.content) {
             this.content.on("reply", function(content) {
-                self.render();
-            });
+                this.render();
+            }.bind(this));
+            this.content.on("removed", function() {
+                this.remove();
+            }.bind(this));
         }
     };
     
@@ -170,9 +172,9 @@ define([
         /**
          * removeContentView.hub
          * @event ContentView#removeContentView.hub
-         * @type {Content}
+         * @type {ContentView}
          */
-        this.$el.trigger('removeContentView.hub', this.content);
+        this.$el.trigger('removeContentView.hub', this);
         this.$el.remove();
     };
     

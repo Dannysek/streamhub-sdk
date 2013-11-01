@@ -10,7 +10,7 @@ function (jasmine, CollectionUpdater, Readable, StateToContent, MockCollection,
 MockLivefyreBootstrapClient, MockLivefyreStreamClient) {
     "use strict";
 
-    describe('streamhub-sdk/collection/streams/updater', function () {
+    describe('Updater', function () {
 
         describe('when constructed', function () {
             var updater,

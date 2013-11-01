@@ -81,6 +81,7 @@ inherits) {
         // Store content with IDs in case we later get
         // replies or attachments targeting it
         if (content && content.id) {
+            //TODO (joao) Check for existing content before setting.
             Storage.set(content.id, content);
             childContent = Storage.get('children_'+content.id) || [];
         }
@@ -145,7 +146,7 @@ inherits) {
     StateToContent._createContent = function (state, authors) {
         var sourceName = StateToContent.enums.source[state.source],
             ContentType;
-
+//TODO (joao) Check if state.vis=0, emit 'delete'?
         state.author = authors && authors[state.content.authorId];
 
         if ('OEMBED' === StateToContent.enums.type[state.type]) {
@@ -202,6 +203,7 @@ inherits) {
 
 
     StateToContent._storeChild = function (child, parentId) {
+        //TODO (joao) Make this smart enough to not push duplicates
         var childrenKey = 'children_' + parentId,
             children = Storage.get(childrenKey) || [];
         children.push(child);
