@@ -82,7 +82,12 @@ inherits) {
         // replies or attachments targeting it
         if (content && content.id) {
             //TODO (joao) Check for existing content before setting.
-            Storage.set(content.id, content);
+            var stored = Storage.get(content.id);
+            if (stored) {
+                stored.set(content);
+            } else {
+                Storage.set(content.id, content);
+            }
             childContent = Storage.get('children_'+content.id) || [];
         }
 

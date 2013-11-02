@@ -28,6 +28,9 @@ define([
         this.visibility = obj.visibility || obj.vis || 1;
         this.attachments = obj.attachments || [];
         this.replies = obj.replies || [];
+        this.on('change:visibility', function () {
+            this.emit('removed');
+        }.bind(this));
     };
     inherits(Content, EventEmitter);
 
@@ -72,7 +75,7 @@ define([
         var oldProperties = {};
         var oldVal, newVal, changed;
         for (var key in newProperties) {
-            if (newProperties.hasOwnProperty(key)) {
+            if (newProperties.hasOwnProperty(key) && key[0] !== '_') {//ignore _listeners and others
                 oldVal = oldProperties[key] = this[key];
                 newVal = this[key] = newProperties[key];
                 if (newVal !== oldVal) {

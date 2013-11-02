@@ -33,6 +33,9 @@ define([
             this.content.on("removed", function() {
                 this.remove();
             }.bind(this));
+            this.content.on("change", function() {
+                this.render();
+            }.bind(this));
         }
     };
     
